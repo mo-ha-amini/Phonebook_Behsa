@@ -57,22 +57,23 @@ namespace Service
         {
             var contacts = GetContacts();
 
-
             if (model.Id == Guid.Empty)
             {
                 model.Id = Guid.NewGuid();
-                contacts.Add(model);
             }
-            else
-            {
-                var contactForEdit = GetContactById(model.Id.ToString());
-                if (contactForEdit!=null)
-                {
-                    contacts.Remove(contactForEdit);
-                    contacts.Add(model);
-                }
-              
-            }
+            contacts.Add(model);
+            return _repo.SaveContact(contacts);
+        }
+
+        public bool EditContact(string selectedId, Contact contact)
+        {
+            var contacts = GetContacts();
+
+
+            var contactForEdit = contacts.FirstOrDefault(x => x.Id.ToString() == selectedId);
+            contacts.Remove(contactForEdit);
+            contact.Id = Guid.Parse(selectedId);
+            contacts.Add(contact);
 
 
             return _repo.SaveContact(contacts);

@@ -23,8 +23,8 @@ namespace WindowsFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
-
-            var contacts = _service.GetContacts();
+            bool saveResult = false;
+            
 
             var newContact = new Contact();
             newContact.Firstname = txt_firstname.Text;
@@ -34,24 +34,20 @@ namespace WindowsFormsApp1
 
             if (string.IsNullOrEmpty(selectedId))
             {
-
                 newContact.Id = Guid.NewGuid();
-                contacts.Add(newContact);
+                saveResult = _service.SaveContact(newContact);
             }
             else
             {
-                var contactForEdit = contacts.FirstOrDefault(x => x.Id.ToString() == selectedId);
-                contacts.Remove(contactForEdit);
-                newContact.Id = Guid.Parse(selectedId);
-                contacts.Add(newContact);
+                saveResult= _service.EditContact(selectedId, newContact);
                 selectedId = "";
             }
 
 
-
-            var saveResult = _service.SaveContact(contacts);
+           
             if (saveResult)
             {
+                var contacts = _service.GetContacts();
                 FillGridView(contacts);
             }
             clearForm();
