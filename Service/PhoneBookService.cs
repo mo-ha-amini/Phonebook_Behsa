@@ -28,8 +28,9 @@ namespace Service
                 _repo.SaveContact(contacts);
                 return true;
             }
-            catch (System.Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine($"Error deleting contact: {ex.Message}");
                 return false;
             }
         }
@@ -69,14 +70,15 @@ namespace Service
         {
             var contacts = GetContacts();
 
-
             var contactForEdit = contacts.FirstOrDefault(x => x.Id.ToString() == selectedId);
-            contacts.Remove(contactForEdit);
-            contact.Id = Guid.Parse(selectedId);
-            contacts.Add(contact);
-
-
-            return _repo.SaveContact(contacts);
+            if (contactForEdit != null)
+            {
+                contacts.Remove(contactForEdit);
+                contact.Id = Guid.Parse(selectedId);
+                contacts.Add(contact);
+                return _repo.SaveContact(contacts);
+            }
+            return false;
         }
     }
 }
