@@ -19,18 +19,14 @@ namespace WindowsFormsApp1
             InitializeComponent();
         }
 
-
-
         private void button1_Click(object sender, EventArgs e)
         {
             bool saveResult = false;
             
-
             var newContact = new Contact();
             newContact.Firstname = txt_firstname.Text;
             newContact.Lastname = txt_lastname.Text;
             newContact.PhoneNumber = txt_phoneNumber.Text;
-
 
             if (string.IsNullOrEmpty(selectedId))
             {
@@ -42,8 +38,6 @@ namespace WindowsFormsApp1
                 saveResult= _service.EditContact(selectedId, newContact);
                 selectedId = "";
             }
-
-
            
             if (saveResult)
             {
@@ -55,18 +49,12 @@ namespace WindowsFormsApp1
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
             var contacts = _service.GetContacts();
             FillGridView(contacts);
         }
 
-
-
-
-
         public void FillGridView(List<Contact> model)
         {
-
             grd_contacts.Rows.Clear();
             foreach (Contact contact in model)
             {
@@ -74,7 +62,6 @@ namespace WindowsFormsApp1
             }
 
         }
-
 
         public void clearForm()
         {
@@ -94,7 +81,6 @@ namespace WindowsFormsApp1
                 var contactForEdit = contacts.FirstOrDefault(x => x.Id.ToString() == id);
                 selectedId = id;
 
-
                 txt_firstname.Text = contactForEdit.Firstname;
                 txt_lastname.Text = contactForEdit.Lastname;
                 txt_phoneNumber.Text = contactForEdit.PhoneNumber;
@@ -103,13 +89,6 @@ namespace WindowsFormsApp1
             {
 
             }
-
-
-        }
-
-        private void grd_contacts_CancelRowEdit(object sender, QuestionEventArgs e)
-        {
-
         }
 
         private void btn_delete_Click(object sender, EventArgs e)
@@ -117,9 +96,12 @@ namespace WindowsFormsApp1
             if (!string.IsNullOrEmpty(selectedId))
             {
                 var deleteResult = _service.DeleteContact(selectedId);
-                var contacts = _service.GetContacts();
-                FillGridView(contacts);
-                clearForm();
+                if (deleteResult)
+                {
+                    var contacts = _service.GetContacts();
+                    FillGridView(contacts);
+                    clearForm();
+                }
             }
         }
     }
