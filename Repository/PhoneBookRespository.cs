@@ -51,7 +51,7 @@ namespace Repository
             }
             catch (Exception)
             {
-
+                Console.WriteLine($"Error reading contacts: {ex.Message}");
             }
 
 
@@ -68,8 +68,9 @@ namespace Repository
                 System.IO.File.WriteAllText(filePath, stringModel);
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine($"Error saving contacts: {ex.Message}");
                 return false;
             }
 
